@@ -1,13 +1,45 @@
-
 import React from "react";
-import './../styles/App.css';
+import "./../styles/App.css";
+import { NavLink, Route, Routes } from "react-router-dom";
+import Playground from "./Playground";
+import Login from "./Login";
+import PrivateRoute from "./PrivateRoute";
 
 const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   return (
     <div>
-        {/* Do not remove the main div */}
-    </div>
-  )
-}
+      {/* Do not remove the main div */}
+      <div className="main-container">
+        <p>
+          {isLoggedIn
+            ? "Logged in, Now you can enter Playground"
+            : "You are not  authenticated, Please login first"}
+        </p>
+        <ul>
+          <li>
+            <NavLink to="/">PlayGround</NavLink>
+          </li>
+          <li>
+            <NavLink to="/login">Login</NavLink>
+          </li>
+        </ul>
 
-export default App
+        <Routes>
+          <Route path="/" element={<PrivateRoute isLoggedIn={isLoggedIn}>
+            <Playground />
+          </PrivateRoute>} />
+          <Route
+            path="/login"
+            element={
+              <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+            }
+          />
+          <Route path="*" element={<p>Page not found</p>} />
+        </Routes>
+      </div>
+    </div>
+  );
+};
+
+export default App;
